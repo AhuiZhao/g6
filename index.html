@@ -1,60 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>时钟</title>
-  <style type="text/css">
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: white;
-      text-align: center;
-      font-family: 'STXinwei', serif;
-    }
-    #clock {
-      display: inline-block;
-      background-color: black;
-      color: white;
-      font-size: 80px;
-      padding: 50px;
-      border: none;
-    }
-    #timer {
-      display: inline-block;
-      background-color: black;
-      color: white;
-      font-size: 40px;
-      padding: 10px 50px;
-      border: none;
-    }
-    #container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
+	<title>Clock</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<style type="text/css">
+		html, body {
+			height: 100%;
+			background-color: #ffffff;
+			margin: 0;
+			padding: 0;
+			font-family: 'STXinwei', sans-serif;
+			font-size: 4vw;
+			color: #000000;
+			text-align: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.clock {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+		}
+
+		.clock > div {
+			margin: 5px;
+		}
+
+		.date {
+			font-size: 2.5vw;
+		}
+
+		.countdown {
+			font-size: 3.5vw;
+		}
+	</style>
 </head>
 <body>
-  <div id="container">
-    <div id="clock"></div>
-    <div id="timer"></div>
-  </div>
-  <script type="text/javascript">
-    function updateTime() {
-      var now = new Date();
-      var hours = now.getHours();
-      var minutes = now.getMinutes();
-      var seconds = now.getSeconds();
-      var day = now.toLocaleDateString();
-      var time = hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
-      document.getElementById('clock').innerHTML = time;
-      document.getElementById('timer').innerHTML = day;
-    }
-    updateTime();
-    setInterval(updateTime, 1000);
-  </script>
+	<div class="clock">
+		<div class="date"></div>
+		<div class="time"></div>
+		<div class="countdown"></div>
+	</div>
+	<script type="text/javascript">
+		var dateElem = document.querySelector(".date");
+		var timeElem = document.querySelector(".time");
+		var countdownElem = document.querySelector(".countdown");
+
+		function updateTime() {
+			var now = new Date();
+			var year = now.getFullYear();
+			var month = now.getMonth() + 1;
+			var day = now.getDate();
+			var hours = now.getHours();
+			var minutes = now.getMinutes();
+			var seconds = now.getSeconds();
+			dateElem.textContent = year + "年" + month + "月" + day + "日";
+			timeElem.textContent = hours + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+			var examTime = new Date(2023, 11, 23, 9, 0, 0); // 考研时间：2023年12月23日9点0分0秒
+			var remainingTime = examTime - now;
+			if (remainingTime > 0) {
+				var remainingSeconds = Math.floor(remainingTime / 1000);
+				var remainingMinutes = Math.floor(remainingSeconds / 60);
+				var remainingHours = Math.floor(remainingMinutes / 60);
+				var days = Math.floor(remainingHours / 24);
+				var hours = remainingHours % 24;
+				var minutes = remainingMinutes % 60;
+				var seconds = remainingSeconds % 60;
+				countdownElem.textContent = "距离考研还有：" + days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
+			} else {
+				countdownElem.textContent = "考研时间已经到了！";
+			}
+		}
+
+		setInterval(updateTime, 1000);
+	</script>
 </body>
 </html>
