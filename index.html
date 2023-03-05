@@ -1,84 +1,66 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>时钟</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        font-family: "STXinwei", "serif";
-      }
-      html,
-      body {
-        height: 100%;
-        background-color: white;
-      }
-      .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        writing-mode: vertical-lr;
-        text-orientation: upright;
-      }
-      .time {
-        font-size: 6rem;
-        text-align: center;
-        margin-bottom: 1rem;
-      }
-      .date {
-        font-size: 2rem;
-        text-align: center;
-        margin-bottom: 2rem;
-      }
-      .countdown {
-        font-size: 4rem;
-        text-align: center;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="time"></div>
-      <div class="date"></div>
-      <div class="countdown"></div>
-    </div>
-    <script>
-      function updateTime() {
-        const now = new Date();
-        const hour = now.getHours();
-        const minute = now.getMinutes();
-        const second = now.getSeconds();
-        const timeStr = `${hour < 10 ? "0" + hour : hour}:${
-          minute < 10 ? "0" + minute : minute
-        }:${second < 10 ? "0" + second : second}`;
-        document.querySelector(".time").textContent = timeStr;
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Clock</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimum-scale=1.0, orientation=landscape">
+	<style>
+		body {
+			background-color: white;
+			color: black;
+			font-family: "STXinwei", "SimSun", "宋体", serif;
+			font-size: 3em;
+			text-align: center;
+			margin: 0;
+			padding: 0;
+			-webkit-text-size-adjust: none;
+		}
 
-        const year = now.getFullYear();
-        const month = now.getMonth() + 1;
-        const date = now.getDate();
-        const dateStr = `${year}年${month}月${date}日`;
-        document.querySelector(".date").textContent = dateStr;
+		.timer {
+			display: inline-block;
+			margin-top: 1em;
+			padding: 0.2em;
+			border: 2px solid black;
+		}
 
-        const examDate = new Date("2023-12-23T08:00:00Z");
-        const timeDiff = examDate.getTime() - now.getTime();
-        const days = Math.floor(timeDiff / (24 * 60 * 60 * 1000));
-        const hours = Math.floor(
-          (timeDiff % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000)
-        );
-        const minutes = Math.floor(
-          (timeDiff % (60 * 60 * 1000)) / (60 * 1000)
-        );
-        const seconds = Math.floor((timeDiff % (60 * 1000)) / 1000);
-        const countdownStr = `距离考研还有${days}天${hours}小时${minutes}分${seconds}秒`;
-        document.querySelector(".countdown").textContent = countdownStr;
-      }
+		.timer span {
+			display: block;
+		}
 
-      updateTime();
-      setInterval(updateTime, 1000);
-    </script>
-  </body>
+		#countdown {
+			margin-top: 1em;
+		}
+	</style>
+	<script>
+		function updateTime() {
+			var today = new Date();
+			var date = today.getFullYear() + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日";
+			var time = today.getHours() + ":" + (today.getMinutes() < 10 ? "0" : "") + today.getMinutes() + ":" + (today.getSeconds() < 10 ? "0" : "") + today.getSeconds();
+			document.getElementById("date").innerHTML = date;
+			document.getElementById("time").innerHTML = time;
+		}
+
+		function updateCountdown() {
+			var examDate = new Date("2023-12-23T09:00:00Z");
+			var now = new Date();
+			var remainingTime = examDate - now;
+			var days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+			var hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+			var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+			var countdown = days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
+			document.getElementById("countdown").innerHTML = countdown;
+		}
+
+		setInterval(updateTime, 1000);
+		setInterval(updateCountdown, 1000);
+	</script>
+</head>
+<body>
+	<div class="timer">
+		<span id="date"></span>
+		<span id="time"></span>
+	</div>
+	<div id="countdown"></div>
+</body>
 </html>
