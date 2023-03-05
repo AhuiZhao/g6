@@ -1,83 +1,57 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>时钟</title>
-	<style>
-		body {
-			background-color: white;
-			color: black;
-			font-size: 4rem;
-			text-align: center;
-			margin: 0;
-			padding: 0;
-			transform: rotate(90deg);
-			-webkit-transform: rotate(90deg);
-			-moz-transform: rotate(90deg);
-			-ms-transform: rotate(90deg);
-			-o-transform: rotate(90deg);
-			transform-origin: left top;
-			-webkit-transform-origin: left top;
-			-moz-transform-origin: left top;
-			-ms-transform-origin: left top;
-			-o-transform-origin: left top;
-			height: 100vh;
-			width: 100vw;
-			overflow: hidden;
-		}
-		
-		.time {
-			display: inline-block;
-			margin-top: 2rem;
-			font-size: 5rem;
-			font-weight: bold;
-		}
-		
-		.date {
-			margin-top: 1rem;
-			font-size: 2rem;
-		}
-
-		.countdown {
-			margin-top: 2rem;
-			font-size: 3rem;
-			font-weight: bold;
-		}
-	</style>
-</head>
-<body>
-	<div class="time"></div>
-	<div class="date"></div>
-	<div class="countdown"></div>
-	<script>
-		function updateTime() {
-			var now = new Date();
-			var hours = now.getHours();
-			var minutes = now.getMinutes();
-			var seconds = now.getSeconds();
-			var timeString = padZero(hours) + ":" + padZero(minutes) + ":" + padZero(seconds);
-			document.querySelector('.time').innerHTML = timeString;
-			
-			var dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-			var dateString = now.toLocaleDateString('zh-CN', dateOptions);
-			document.querySelector('.date').innerHTML = dateString;
-			
-			var examDate = new Date('2023-12-23');
-			var timeDiff = examDate - now;
-			var daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-			document.querySelector('.countdown').innerHTML = '距离考研还有 ' + daysLeft + ' 天';
-		}
-
-		function padZero(number) {
-			if (number < 10) {
-				return "0" + number;
-			} else {
-				return number;
-			}
-		}
-
-		setInterval(updateTime, 1000);
-	</script>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <title>Clock and Countdown</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: white;
+        color: black;
+        text-align: center;
+        font-size: 5vw;
+        font-family: Arial, sans-serif;
+      }
+      #clock {
+        padding-top: 30%;
+      }
+      #countdown {
+        padding-top: 10%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="clock"></div>
+    <div id="countdown"></div>
+    <script>
+      function updateTime() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+        var timeString = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+        document.getElementById('clock').textContent = timeString;
+      }
+      
+      function updateCountdown() {
+        var examDate = new Date('December 25, 2023 08:00:00');
+        var now = new Date();
+        var timeDiff = examDate.getTime() - now.getTime();
+        if (timeDiff < 0) {
+          document.getElementById('countdown').textContent = 'Exam is over!';
+        } else {
+          var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+          var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+          var countdownString = days + 'd ' + hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+          document.getElementById('countdown').textContent = countdownString;
+        }
+      }
+      
+      setInterval(updateTime, 1000);
+      setInterval(updateCountdown, 1000);
+    </script>
+  </body>
 </html>
