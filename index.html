@@ -1,57 +1,53 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Clock and Countdown</title>
+<head>
+    <meta charset="UTF-8">
+    <title>时钟</title>
     <style>
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: white;
-        color: black;
-        text-align: center;
-        font-size: 5vw;
-        font-family: Arial, sans-serif;
-      }
-      #clock {
-        padding-top: 30%;
-      }
-      #countdown {
-        padding-top: 10%;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="clock"></div>
-    <div id="countdown"></div>
-    <script>
-      function updateTime() {
-        var now = new Date();
-        var hours = now.getHours();
-        var minutes = now.getMinutes();
-        var seconds = now.getSeconds();
-        var timeString = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
-        document.getElementById('clock').textContent = timeString;
-      }
-      
-      function updateCountdown() {
-        var examDate = new Date('December 25, 2023 08:00:00');
-        var now = new Date();
-        var timeDiff = examDate.getTime() - now.getTime();
-        if (timeDiff < 0) {
-          document.getElementById('countdown').textContent = 'Exam is over!';
-        } else {
-          var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-          var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-          var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-          var countdownString = days + 'd ' + hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
-          document.getElementById('countdown').textContent = countdownString;
+        body {
+            background-color: white;
+            color: black;
+            text-align: center;
         }
-      }
-      
-      setInterval(updateTime, 1000);
-      setInterval(updateCountdown, 1000);
+        
+        h1 {
+            font-size: 6em;
+            margin-top: 0.2em;
+            margin-bottom: 0.2em;
+        }
+        
+        p {
+            font-size: 2em;
+            margin-top: 0.2em;
+            margin-bottom: 0.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="clock"></h1>
+    <p id="date"></p>
+    <p>距离考研还有<span id="countdown"></span>天</p>
+    <script>
+        function updateClock() {
+            var now = new Date();
+            var hour = now.getHours();
+            var minute = now.getMinutes();
+            var second = now.getSeconds();
+            hour = hour < 10 ? '0' + hour : hour;
+            minute = minute < 10 ? '0' + minute : minute;
+            second = second < 10 ? '0' + second : second;
+            document.getElementById('clock').innerHTML = hour + ":" + minute + ":" + second;
+            var year = now.getFullYear() + 1;
+            var month = now.getMonth() + 1;
+            var day = 25;
+            var examDate = new Date(year, month - 1, day);
+            var daysLeft = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown').innerHTML = daysLeft;
+            var dateStr = year + "年" + month + "月" + day + "日";
+            document.getElementById('date').innerHTML = dateStr;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
     </script>
-  </body>
+</body>
 </html>
